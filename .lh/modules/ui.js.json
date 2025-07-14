@@ -1,0 +1,30 @@
+{
+    "sourceFile": "modules/ui.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1752482618325,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752483473460,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,33 @@\n const main = document.getElementById(\"main\");\n \n+const form=document.createElement(\"form\");\n const container = document.getElementById(\"container\");\n+\n+\n+const createListItem=(item)=>{\n+\n+const containerItem=document.createElement(\"div\");\n+\n+const containerItemTitle= document.createElement(\"h2\");\n+containerItemTitle.textContent=item.title;\n+\n+\n+const containerItemImage= document.createElement(\"img\");\n+containerItemImage.setAttribute(\"src\",item.image);\n+\n+\n+const containerItemPreis= document.createElement(\"p\");\n+containerItemPreis.textContent=item.price;\n+\n+\n+const addBtn= document.createElement(\"button\");\n+addBtn.textContent=\"Add to Cart\";\n+// const deleteBtn= document.createElement(\"button\");\n+\n+containerItem.appendChild(containerItemTitle);\n+containerItem.appendChild(containerItemImage);\n+containerItem.appendChild(containerItemPreis);\n+containerItem.appendChild(addBtn);\n+form.appendChild(containerItem);\n+\n+}\n"
+                },
+                {
+                    "date": 1752483537768,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const main = document.getElementById(\"main\");\n \n+const container = document.getElementById(\"container\");\n const form = document.createElement(\"form\");\n-const container = document.getElementById(\"container\");\n \n const createListItem = item => {\n   const containerItem = document.createElement(\"div\");\n \n@@ -23,5 +23,6 @@\n   containerItem.appendChild(containerItemImage);\n   containerItem.appendChild(containerItemPreis);\n   containerItem.appendChild(addBtn);\n   form.appendChild(containerItem);\n+  container.appendChild(form);\n };\n"
+                },
+                {
+                    "date": 1752485495769,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,29 @@\n+const main = document.getElementById(\"main\");\n+\n+export const container = document.getElementById(\"container\");\n+\n+export const createContainerItem = item => {\n+  const containerItem = document.createElement(\"div\");\n+\n+  const containerItemTitle = document.createElement(\"h2\");\n+  containerItemTitle.textContent = item.title;\n+\n+  const containerItemImage = document.createElement(\"img\");\n+  containerItemImage.setAttribute(\"src\", item.image);\n+\n+  const containerItemPreis = document.createElement(\"p\");\n+  containerItemPreis.textContent = item.price;\n+\n+  const addBtn = document.createElement(\"button\");\n+  addBtn.textContent = \"Add to Cart\";\n+\n+  addBtn.classList.add(\"addBtn\");\n+  // const deleteBtn= document.createElement(\"button\");\n+\n+  containerItem.appendChild(containerItemTitle);\n+  containerItem.appendChild(containerItemImage);\n+  containerItem.appendChild(containerItemPreis);\n+  containerItem.appendChild(addBtn);\n+  containerItem.setAttribute(\"id\", item.id);\n+  return containerItem;\n+};\n"
+                }
+            ],
+            "date": 1752482618325,
+            "name": "Commit-0",
+            "content": "const main = document.getElementById(\"main\");\n\nconst container = document.getElementById(\"container\");\n"
+        }
+    ]
+}

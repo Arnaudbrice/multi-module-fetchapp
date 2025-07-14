@@ -1,0 +1,26 @@
+{
+    "sourceFile": "modules/storage.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1752482417570,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752482468055,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,5 @@\n-const getCartItems = () => JSON.parse(localStorage.getItem(\"cart\")) || [];\n+export const getCartItems = () =>\n+  JSON.parse(localStorage.getItem(\"cart\")) || [];\n \n-const updateCartItems = data =>\n+export const setCartItems = () =>\n   localStorage.setItem(\"cart\", JSON.stringify(data));\n"
+                },
+                {
+                    "date": 1752483087215,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n export const getCartItems = () =>\n   JSON.parse(localStorage.getItem(\"cart\")) || [];\n \n-export const setCartItems = () =>\n+export const setCartItems = data =>\n   localStorage.setItem(\"cart\", JSON.stringify(data));\n"
+                }
+            ],
+            "date": 1752482417569,
+            "name": "Commit-0",
+            "content": "const getCartItems = () => JSON.parse(localStorage.getItem(\"cart\")) || [];\n\nconst updateCartItems = data =>\n  localStorage.setItem(\"cart\", JSON.stringify(data));\n"
+        }
+    ]
+}

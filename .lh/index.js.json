@@ -1,0 +1,102 @@
+{
+    "sourceFile": "index.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 21,
+            "patches": [
+                {
+                    "date": 1752481866075,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752482615444,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,4 +2,7 @@\n \n const data = await fetchData();\n \n console.log(data);\n+//populate the dom\n+\n+//update localStorage\n"
+                },
+                {
+                    "date": 1752484397356,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,33 @@\n import { fetchData } from \"./modules/network.js\";\n+import { container, createContainerItem } from \"./modules/ui.js\";\n \n+import { getCartItems, setCartItems } from \"./modules/storage.js\";\n+\n const data = await fetchData();\n \n console.log(data);\n //populate the dom\n \n+const handleSubmit = async event => {\n+  const data = await fetchData();\n+};\n+\n+const cartItem = {\n+  id: item.id,\n+  title: item.title,\n+  image: item.image,\n+  price: item.price\n+};\n+\n //update localStorage\n+\n+const handleRefresh = async event => {\n+  try {\n+    const cartItems = getCartItems();\n+    console.log(cartItems);\n+  } catch (error) {}\n+};\n+\n+//event listeners\n+form.addEventListener(\"submit\", handleSubmit);\n+window.addEventListener(\"load\", handleRefresh);\n"
+                },
+                {
+                    "date": 1752484881850,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n \n console.log(data);\n //populate the dom\n \n-const handleSubmit = async event => {\n+const handleAdd = async event => {\n   const data = await fetchData();\n };\n \n const cartItem = {\n@@ -20,14 +20,17 @@\n };\n \n //update localStorage\n \n-const handleRefresh = async event => {\n-  try {\n+const handleAdd =  event => {\n+ event.preventDefault();\n     const cartItems = getCartItems();\n-    console.log(cartItems);\n-  } catch (error) {}\n+   for (const cartItem of cartItems) {\n+   const containerItem = createContainerItem(cartItem);\n+   container.prepend(containerItem);\n+\n+\n };\n \n //event listeners\n-form.addEventListener(\"submit\", handleSubmit);\n+container.addEventListener(\"click\", handleAdd);\n window.addEventListener(\"load\", handleRefresh);\n"
+                },
+                {
+                    "date": 1752484891871,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,16 +20,15 @@\n };\n \n //update localStorage\n \n-const handleAdd =  event => {\n- event.preventDefault();\n-    const cartItems = getCartItems();\n-   for (const cartItem of cartItems) {\n-   const containerItem = createContainerItem(cartItem);\n-   container.prepend(containerItem);\n-\n-\n+const handleAdd = event => {\n+  event.preventDefault();\n+  const cartItems = getCartItems();\n+  for (const cartItem of cartItems) {\n+    const containerItem = createContainerItem(cartItem);\n+    container.prepend(containerItem);\n+  }\n };\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n"
+                },
+                {
+                    "date": 1752485099200,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,12 +7,8 @@\n \n console.log(data);\n //populate the dom\n \n-const handleAdd = async event => {\n-  const data = await fetchData();\n-};\n-\n const cartItem = {\n   id: item.id,\n   title: item.title,\n   image: item.image,\n@@ -20,10 +16,18 @@\n };\n \n //update localStorage\n \n-const handleAdd = event => {\n-  event.preventDefault();\n+const handleLoad = async event => {\n+  try {\n+    const data = await fetchData();\n+    setCartItems(data);\n+    for (const item of data) {\n+      const containerItem = createContainerItem(data);\n+      container.prepend(containerItem);\n+    }\n+  } catch (error) {}\n+\n   const cartItems = getCartItems();\n   for (const cartItem of cartItems) {\n     const containerItem = createContainerItem(cartItem);\n     container.prepend(containerItem);\n@@ -31,5 +35,5 @@\n };\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n-window.addEventListener(\"load\", handleRefresh);\n+window.addEventListener(\"load\", handleLoad);\n"
+                },
+                {
+                    "date": 1752485194585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,11 +19,11 @@\n \n const handleLoad = async event => {\n   try {\n     const data = await fetchData();\n-    setCartItems(data);\n+\n     for (const item of data) {\n-      const containerItem = createContainerItem(data);\n+      const containerItem = createContainerItem(item);\n       container.prepend(containerItem);\n     }\n   } catch (error) {}\n \n"
+                },
+                {
+                    "date": 1752485345981,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,19 +14,20 @@\n   image: item.image,\n   price: item.price\n };\n \n-//update localStorage\n-\n+//populate the dom with data from the api\n const handleLoad = async event => {\n   try {\n     const data = await fetchData();\n \n     for (const item of data) {\n       const containerItem = createContainerItem(item);\n       container.prepend(containerItem);\n     }\n-  } catch (error) {}\n+  } catch (error) {\n+    console.error(error);\n+  }\n \n   const cartItems = getCartItems();\n   for (const cartItem of cartItems) {\n     const containerItem = createContainerItem(cartItem);\n"
+                },
+                {
+                    "date": 1752485377698,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,34 @@\n+import { fetchData } from \"./modules/network.js\";\n+import { container, createContainerItem } from \"./modules/ui.js\";\n+\n+import { getCartItems, setCartItems } from \"./modules/storage.js\";\n+\n+const data = await fetchData();\n+\n+console.log(data);\n+//populate the dom\n+\n+const cartItem = {\n+  id: item.id,\n+  title: item.title,\n+  image: item.image,\n+  price: item.price\n+};\n+\n+//populate the dom with data from the api\n+const handleLoad = async event => {\n+  try {\n+    const data = await fetchData();\n+\n+    for (const item of data) {\n+      const containerItem = createContainerItem(item);\n+      container.prepend(containerItem);\n+    }\n+  } catch (error) {\n+    console.error(error);\n+  }\n+};\n+\n+//event listeners\n+container.addEventListener(\"click\", handleAdd);\n+window.addEventListener(\"load\", handleLoad);\n"
+                },
+                {
+                    "date": 1752485419181,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,47 +28,12 @@\n     console.error(error);\n   }\n };\n \n-//event listeners\n-container.addEventListener(\"click\", handleAdd);\n-window.addEventListener(\"load\", handleLoad);\n-import { fetchData } from \"./modules/network.js\";\n-import { container, createContainerItem } from \"./modules/ui.js\";\n-\n-import { getCartItems, setCartItems } from \"./modules/storage.js\";\n-\n-const data = await fetchData();\n-\n-console.log(data);\n-//populate the dom\n-\n-const cartItem = {\n-  id: item.id,\n-  title: item.title,\n-  image: item.image,\n-  price: item.price\n+//add to cart\n+const handleAdd = event => {\n+  console.log(event.target);\n };\n \n-//populate the dom with data from the api\n-const handleLoad = async event => {\n-  try {\n-    const data = await fetchData();\n-\n-    for (const item of data) {\n-      const containerItem = createContainerItem(item);\n-      container.prepend(containerItem);\n-    }\n-  } catch (error) {\n-    console.error(error);\n-  }\n-\n-  const cartItems = getCartItems();\n-  for (const cartItem of cartItems) {\n-    const containerItem = createContainerItem(cartItem);\n-    container.prepend(containerItem);\n-  }\n-};\n-\n //event listeners\n container.addEventListener(\"click\", handleAdd);\n window.addEventListener(\"load\", handleLoad);\n"
+                },
+                {
+                    "date": 1752485588410,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n   price: item.price\n };\n \n //populate the dom with data from the api\n-const handleLoad = async event => {\n+const handleLoad = async () => {\n   try {\n     const data = await fetchData();\n \n     for (const item of data) {\n"
+                },
+                {
+                    "date": 1752485607206,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,40 @@\n+import { fetchData } from \"./modules/network.js\";\n+import { container, createContainerItem } from \"./modules/ui.js\";\n+\n+import { getCartItems, setCartItems } from \"./modules/storage.js\";\n+\n+const data = await fetchData();\n+\n+console.log(data);\n+//populate the dom\n+\n+const cartItem = {\n+  id: item.id,\n+  title: item.title,\n+  image: item.image,\n+  price: item.price\n+};\n+\n+//populate the dom with data from the api\n+const handleLoad = async () => {\n+  try {\n+    const data = await fetchData();\n+    console.log(\"handle load data\", data);\n+\n+    for (const item of data) {\n+      const containerItem = createContainerItem(item);\n+      container.prepend(containerItem);\n+    }\n+  } catch (error) {\n+    console.error(error);\n+  }\n+};\n+\n+//add to cart\n+const handleAdd = event => {\n+  console.log(event.target);\n+};\n+\n+//event listeners\n+container.addEventListener(\"click\", handleAdd);\n+window.addEventListener(\"load\", handleLoad);\n"
+                },
+                {
+                    "date": 1752485656359,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,19 +2,14 @@\n import { container, createContainerItem } from \"./modules/ui.js\";\n \n import { getCartItems, setCartItems } from \"./modules/storage.js\";\n \n-const data = await fetchData();\n-\n-console.log(data);\n-//populate the dom\n-\n-const cartItem = {\n+/* const cartItem = {\n   id: item.id,\n   title: item.title,\n   image: item.image,\n   price: item.price\n-};\n+}; */\n \n //populate the dom with data from the api\n const handleLoad = async () => {\n   try {\n@@ -37,43 +32,4 @@\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n window.addEventListener(\"load\", handleLoad);\n-import { fetchData } from \"./modules/network.js\";\n-import { container, createContainerItem } from \"./modules/ui.js\";\n-\n-import { getCartItems, setCartItems } from \"./modules/storage.js\";\n-\n-const data = await fetchData();\n-\n-console.log(data);\n-//populate the dom\n-\n-const cartItem = {\n-  id: item.id,\n-  title: item.title,\n-  image: item.image,\n-  price: item.price\n-};\n-\n-//populate the dom with data from the api\n-const handleLoad = async () => {\n-  try {\n-    const data = await fetchData();\n-\n-    for (const item of data) {\n-      const containerItem = createContainerItem(item);\n-      container.prepend(containerItem);\n-    }\n-  } catch (error) {\n-    console.error(error);\n-  }\n-};\n-\n-//add to cart\n-const handleAdd = event => {\n-  console.log(event.target);\n-};\n-\n-//event listeners\n-container.addEventListener(\"click\", handleAdd);\n-window.addEventListener(\"load\", handleLoad);\n"
+                },
+                {
+                    "date": 1752485862756,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,8 +27,13 @@\n \n //add to cart\n const handleAdd = event => {\n   console.log(event.target);\n+  if (event.target.classList.contain(\"addBtn\")) {\n+    console.log(event.target.closest(\"div\"));\n+\n+    // const cartItems= getCartItems();\n+  }\n };\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n"
+                },
+                {
+                    "date": 1752486051960,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,13 +27,18 @@\n \n //add to cart\n const handleAdd = event => {\n   console.log(event.target);\n-  if (event.target.classList.contain(\"addBtn\")) {\n-    console.log(event.target.closest(\"div\"));\n+  if (!event.target.classList.contain(\"addBtn\")) {\n+    return;\n \n     // const cartItems= getCartItems();\n   }\n+  const cartItems = getCartItems();\n+  /*   const carItem={\n+    id:event.target.closest(\"\")\n+  } */\n+  console.log(event.target.closest(\"div\"));\n };\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n"
+                },
+                {
+                    "date": 1752486073115,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n   const cartItems = getCartItems();\n   /*   const carItem={\n     id:event.target.closest(\"\")\n   } */\n-  console.log(event.target.closest(\"div\"));\n+  console.log(\"event closest\", event.target.closest(\"div\"));\n };\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n"
+                },
+                {
+                    "date": 1752486163276,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n \n //add to cart\n const handleAdd = event => {\n   console.log(event.target);\n-  if (!event.target.classList.contain(\"addBtn\")) {\n+  if (!event.target.classList.contains(\"addBtn\")) {\n     return;\n \n     // const cartItems= getCartItems();\n   }\n"
+                },
+                {
+                    "date": 1752486207007,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,12 +33,12 @@\n \n     // const cartItems= getCartItems();\n   }\n   const cartItems = getCartItems();\n-  /*   const carItem={\n-    id:event.target.closest(\"\")\n+  /*     const carItem={\n+    id:event.target.closest(\"div\").id\n   } */\n-  console.log(\"event closest\", event.target.closest(\"div\"));\n+  console.log(\"event closest\", event.target.closest(\"div\").id);\n };\n \n //event listeners\n container.addEventListener(\"click\", handleAdd);\n"
+                },
+                {
+                    "date": 1752486311430,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n     console.log(\"handle load data\", data);\n \n     for (const item of data) {\n       const containerItem = createContainerItem(item);\n-      container.prepend(containerItem);\n+      container.appendChild(containerItem);\n     }\n   } catch (error) {\n     console.error(error);\n   }\n"
+                },
+                {
+                    "date": 1752486412640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,11 +33,12 @@\n \n     // const cartItems= getCartItems();\n   }\n   const cartItems = getCartItems();\n-  /*     const carItem={\n-    id:event.target.closest(\"div\").id\n-  } */\n+      const carItem={\n+    id:event.target.closest(\"div\").id,\n+    title:\n+  }\n   console.log(\"event closest\", event.target.closest(\"div\").id);\n };\n \n //event listeners\n"
+                },
+                {
+                    "date": 1752486433986,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -35,9 +35,9 @@\n   }\n   const cartItems = getCartItems();\n       const carItem={\n     id:event.target.closest(\"div\").id,\n-    title:\n+    title:event.target.closest(\"div\").id\n   };\n   console.log(\"event closest\", event.target.closest(\"div\").id);\n };\n \n"
+                },
+                {
+                    "date": 1752487178910,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,8 +43,9 @@\n   };\n \n   console.log(\"item\", item);\n \n+  if(!cartItems.contains(item)){\n   cartItems = [...cartItems, item];\n   setCartItems(cartItems);\n };\n \n"
+                }
+            ],
+            "date": 1752481866075,
+            "name": "Commit-0",
+            "content": "import { fetchData } from \"./modules/network.js\";\n\nconst data = await fetchData();\n\nconsole.log(data);\n"
+        }
+    ]
+}
