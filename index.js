@@ -8,47 +8,52 @@ import { styleClasses, pageStyling } from "./modules/ui.js";
 //handle load event to populate the page with data from the API
 const handleLoad = async () => {
   try {
+    // top level await (It works only if the imported script is from type module )
     const data = await fetchData();
     console.log("handle load data", data);
 
     pageStyling();
 
-    for (const item of data) {
-      const containerItem = createContainerItem(item);
-      container.appendChild(containerItem);
-    }
-
-    // Apply container styles
-    container.classList.add(...styleClasses.container);
-    // Apply styles after items are added
-    [...container.children].forEach(containerItem => {
-      containerItem.classList.add(...styleClasses.containerItem);
-
-      containerItem
-        .querySelector("h2")
-        .classList.add(...styleClasses.containerHeading);
-      containerItem
-        .querySelector("img")
-        .classList.add(...styleClasses.containerItemImage);
-
-      containerItem
-        .querySelector("p")
-        .classList.add(...styleClasses.containerItemPrice);
-
-      containerItem
-        .querySelector("button")
-        .classList.add(...styleClasses.containerItemAddBtn);
-
-      // container card hover effect
-      for (const containerItem of [...container.children]) {
-        containerItem.addEventListener("mouseover", function(event) {
-          this.style.transform = "scale(1.05)";
-        });
-        containerItem.addEventListener("mouseout", function(event) {
-          this.style.transform = "scale(1)";
-        });
+    if (data.length > 0) {
+      for (const item of data) {
+        const containerItem = createContainerItem(item);
+        container.appendChild(containerItem);
       }
-    });
+
+      // Apply container styles
+      container.classList.add(...styleClasses.container);
+      // Apply styles after items are added
+      [...container.children].forEach(containerItem => {
+        containerItem.classList.add(...styleClasses.containerItem);
+
+        containerItem
+          .querySelector("h2")
+          .classList.add(...styleClasses.containerHeading);
+        containerItem
+          .querySelector("img")
+          .classList.add(...styleClasses.containerItemImage);
+
+        containerItem
+          .querySelector("p")
+          .classList.add(...styleClasses.containerItemPrice);
+
+        containerItem
+          .querySelector("button")
+          .classList.add(...styleClasses.containerItemAddBtn);
+
+        // container card hover effect
+        for (const containerItem of [...container.children]) {
+          containerItem.addEventListener("mouseover", function(event) {
+            this.style.transform = "scale(1.05)";
+          });
+          containerItem.addEventListener("mouseout", function(event) {
+            this.style.transform = "scale(1)";
+          });
+        }
+      });
+    } else {
+      return;
+    }
   } catch (error) {
     console.error(error);
   }

@@ -8,10 +8,16 @@ export const createContainerItem = item => {
   containerItemTitle.textContent = item.title;
 
   const containerItemImage = document.createElement("img");
+
+  //image comes with src and alt attribute per default( we can direct access them or we can use setAttribute)
+  //containerItemImage.src = item.image;
+  //containerItemImage.alt = item.title;
   containerItemImage.setAttribute("src", item.image);
 
+  containerItemImage.setAttribute("alt", item.title);
+
   const containerItemPreis = document.createElement("p");
-  containerItemPreis.textContent = `$${item.price}`;
+  containerItemPreis.textContent = `$${item.price.toFixed(2)}`;
 
   const addBtn = document.createElement("button");
   addBtn.textContent = "Add to Cart";
